@@ -1,0 +1,157 @@
+Abdomen              20.0              
+Abdomen CaL          20.0              
+Activity             10.0              
+Audio                8000.0            
+Audio Volume         20.0              
+Audio Volume dB      20.0              
+cRIP Flow            20.0              
+cRIP Sum             20.0              
+ECG                  200.0             
+Elevation            10.0              
+Flow                 200.0             
+Flow Limitation      5.0               
+Heart Rate           2.0               
+K                    20.0              
+Nasal Pressure       200.0             
+Pulse Waveform       75.0              
+PosAngle             10.0              
+PTT                  75.0              
+Pulse                3.0               
+PWA                  75.0              
+Resp Rate            20.0              
+RIP Flow             20.0              
+RIP Phase            1.0               
+RIP Sum              20.0              
+Snore                200.0             
+Saturation           3.0               
+SpO2 B-B             3.0               
+Thorax               20.0              
+X Axis               10.0              
+Y Axis               10.0              
+Z Axis               10.0              
+Abdomen              20.0              
+Abdomen CaL          20.0              
+Activity             10.0              
+Audio                8000.0            
+Audio Volume         20.0              
+Audio Volume dB      20.0              
+cRIP Flow            20.0              
+cRIP Sum             20.0              
+ECG                  200.0             
+Elevation            10.0              
+Flow                 200.0             
+Flow Limitation      5.0               
+Heart Rate           2.0               
+K                    20.0              
+Nasal Pressure       200.0             
+Pulse Waveform       75.0              
+PosAngle             10.0              
+PTT                  75.0              
+Pulse                3.0               
+PWA                  75.0              
+Resp Rate            20.0              
+RIP Flow             20.0              
+RIP Phase            1.0               
+RIP Sum              20.0              
+Snore                200.0             
+Saturation           3.0               
+SpO2 B-B             3.0               
+Thorax               20.0              
+X Axis               10.0              
+Y Axis               10.0              
+Z Axis               10.0              
+Abdomen              20.0              
+Abdomen CaL          20.0              
+Activity             10.0              
+Audio                8000.0            
+Audio Volume         20.0              
+Audio Volume dB      20.0              
+cRIP Flow            20.0              
+cRIP Sum             20.0              
+ECG                  200.0             
+EKG                  200.0             
+Elevation            10.0              
+Flow                 200.0             
+Flow Limitation      5.0               
+Heart Rate           2.0               
+K                    20.0              
+Nasal Pressure       200.0             
+Pulse Waveform       75.0              
+PosAngle             10.0              
+PTT                  75.0              
+Pulse                3.0               
+PWA                  75.0              
+Resp Rate            20.0              
+RIP Flow             20.0              
+RIP Phase            1.0               
+RIP Sum              20.0              
+Snore                200.0             
+Saturation           3.0               
+SpO2 B-B             3.0               
+Thorax               20.0              
+X Axis               10.0              
+Y Axis               10.0              
+Z Axis               10.0              
+Abdomen              20.0              
+Abdomen CaL          20.0              
+Activity             10.0              
+Light                1.0               
+Audio                8000.0            
+Audio Volume         20.0              
+Audio Volume dB      20.0              
+cRIP Flow            20.0              
+cRIP Sum             20.0              
+ECG                  200.0             
+Elevation            10.0              
+Flow                 200.0             
+Flow Limitation      5.0               
+Heart Rate           3.0               
+K                    20.0              
+Nasal Pressure       200.0             
+Pulse Waveform       74.9              
+PosAngle             10.0              
+PTT                  74.9              
+Pulse                2.9               
+PWA                  74.9              
+Resp Rate            20.0              
+RIP Flow             20.0              
+RIP Phase            1.0               
+RIP Sum              20.0              
+Snore                200.0             
+Saturation           2.9               
+SpO2 B-B             2.9               
+Thorax               20.0              
+X Axis               10.0              
+Y Axis               10.0              
+Z Axis               10.0              
+Abdomen              19.9              
+Abdomen CaL          20.0              
+Activity             10.0              
+Audio                8000.0            
+Audio Volume         20.0              
+Audio Volume dB      20.0              
+cRIP Flow            19.9              
+cRIP Sum             19.9              
+ECG                  204.1             
+Elevation            10.0              
+Flow                 204.1             
+Flow Limitation      5.0               
+Heart Rate           3.0               
+K                    20.0              
+Nasal Pressure       204.1             
+Pulse Waveform       75.0              
+PosAngle             10.0              
+PTT                  75.0              
+Pulse                3.0               
+PWA                  75.0              
+Resp Rate            19.9              
+RIP Flow             19.9              
+RIP Phase            1.0               
+RIP Sum              19.9              
+Snore                204.1             
+Saturation           3.0               
+SpO2 B-B             3.0               
+Thorax               19.9              
+X Axis               10.0              
+Y Axis               10.0              
+Z Axis               10.0              
