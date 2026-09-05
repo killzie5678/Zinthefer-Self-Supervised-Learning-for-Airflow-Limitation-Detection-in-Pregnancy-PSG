@@ -7,6 +7,7 @@ The central goal is to exploit the large amount of unlabeled PSG signal using se
 
 
 The project has five main goals:
+
 -Build a PSG processing pipeline that extracts, aligns, resamples, and normalizes the respiratory channels from the original recordings.
 
 -Establish supervised baselines for breath-level classification using the 559 labeled breaths.
