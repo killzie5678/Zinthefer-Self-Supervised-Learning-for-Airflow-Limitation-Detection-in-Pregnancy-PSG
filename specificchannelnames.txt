@@ -1,0 +1,40 @@
+
+=== 5031.edf ===
+Abdomen              20.0              
+Flow                 200.0             
+Nasal Pressure       200.0             
+RIP Flow             20.0              
+Snore                200.0             
+Thorax               20.0              
+
+=== 5167_4051_1.edf ===
+Abdomen              20.0              
+Flow                 200.0             
+Nasal Pressure       200.0             
+RIP Flow             20.0              
+Snore                200.0             
+Thorax               20.0              
+
+=== 5182_4066_3.edf ===
+Abdomen              20.0              
+Flow                 200.0             
+Nasal Pressure       200.0             
+RIP Flow             20.0              
+Snore                200.0             
+Thorax               20.0              
+
+=== 5402_4286_1.edf ===
+Abdomen              20.0              
+Flow                 200.0             
+Nasal Pressure       200.0             
+RIP Flow             20.0              
+Snore                200.0             
+Thorax               20.0              
+
+=== 5460_4344_1.edf ===
+Abdomen              19.9              
+Flow                 204.1             
+Nasal Pressure       204.1             
+RIP Flow             19.9              
+Snore                204.1             
+Thorax               19.9              
