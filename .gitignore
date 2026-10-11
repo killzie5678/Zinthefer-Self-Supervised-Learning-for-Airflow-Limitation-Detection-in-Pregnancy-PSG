@@ -1,2 +1,22 @@
 *.edf
 .claude/settings.local.json
+
+# patient data - large and not for GitHub
+*.npz
+*.npy
+*.ndb
+*.zip
+*.bak
+Batch */
+SSRE/
+5016/
+5017/
+pretrain dataset/
+pretrain plots/
+
+# logs and tables that list patient IDs and recording dates
+Batch 2 edf export log.csv
+Batch 2 export console.txt
+Batch 2 short recordings - missing data.csv
+
+__pycache__/

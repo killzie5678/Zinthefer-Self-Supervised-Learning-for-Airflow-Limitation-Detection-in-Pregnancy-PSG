@@ -1,18 +1,21 @@
 import matplotlib.pyplot as plt
 import glob
-import pyedflib
 import numpy as np
+from channels import EdfReader, respiratory_channels, find_channel
 
 
 edf_files = glob.glob("*.edf")
 print("Found files:", edf_files)
-respiratory_channels = ["Flow", "Nasal Pressure", "Snore", "RIP Flow", "Thorax", "Abdomen"]
 
 for filepath in edf_files:
     for item in respiratory_channels:
-            reader = pyedflib.EdfReader(filepath)
+            reader = EdfReader(filepath)
             labels = reader.getSignalLabels()
-            index = labels.index(item)
+            index = find_channel(labels, item)
+            if index is None:
+                print(f"WARNING: {filepath} has no {item} channel - skipped")
+                reader.close()
+                continue
             signal = reader.readSignal(index)
             rate = reader.getSampleFrequency(index)
             n_samples = int(60 * rate)
