@@ -13,6 +13,7 @@ SSRE/
 5017/
 pretrain dataset/
 pretrain plots/
+pretrain runs/
 
 # logs and tables that list patient IDs and recording dates
 Batch 2 edf export log.csv
