@@ -5,8 +5,8 @@
 #
 # Reads manifest.csv and gaps.csv (from build_pretrain_dataset.py) and writes
 # windows.csv next to them: one row per 30 s window, saying which recording it
-# comes from, where it starts, whether it is train or val, and which belt
-# channels (if any) have a gap in it. The signal data stays in the .npy files;
+# comes from, where it starts, whether it is train or val, which channels (if
+# any) have a gap in it, and whether it is flagged. The signal data stays in the .npy files;
 # a loader reads each window straight out of them:
 #
 #   x = np.load(f"pretrain dataset/{recording_id}.npy", mmap_mode="r")
@@ -15,9 +15,10 @@
 # Rules:
 #   - only the selected recording per patient, and only nights with at least
 #     --min-usable-hours of usable signal
-#   - a window is DROPPED if Flow, Nasal Pressure or Snore has a gap in it
-#     (those are what airflow limitation and snoring are judged from)
-#   - a window with only belt gaps is KEPT, and the missing belts are listed
+#   - every window is KEPT; "missing" lists the channels with a gap in it
+#   - a window is FLAGGED (flagged = yes) if Flow, Nasal Pressure or Snore has
+#     a gap, since those are what airflow limitation and snoring are judged
+#     from. Whatever uses the windows decides whether to skip flagged ones.
 #   - each patient is train or val by a fixed hash of their ID, so nobody
 #     switches sides when new exports are added, and no patient is in both
 
@@ -31,7 +32,7 @@ import numpy as np
 from channels import respiratory_channels
 
 REQUIRED = {"Flow", "Nasal Pressure", "Snore"}
-FIELDS = ["recording_id", "patient_id", "split", "window", "start_sample", "missing"]
+FIELDS = ["recording_id", "patient_id", "split", "window", "start_sample", "missing", "flagged"]
 
 
 def split_for(patient_id, val_percent):
@@ -63,8 +64,8 @@ def main():
           f"for < {args.min_usable_hours:g} usable h; using {len(used)}")
 
     rows = []
-    stats = {"train": [0, 0, set()], "val": [0, 0, set()]}  # windows kept, with belt gaps, patients
-    dropped = 0
+    stats = {"train": [0, 0, set()], "val": [0, 0, set()]}  # windows kept, with any gaps, patients
+    n_flagged = 0
     for rec in sorted(used, key=lambda r: r["recording_id"]):
         rate = int(rec["rate"])
         n_seconds = int(rec["n_samples"]) // rate
@@ -84,13 +85,14 @@ def main():
 
         for w in range(n_windows):
             missing = [name for name in respiratory_channels if bad_windows[name][w]]
-            if REQUIRED & set(missing):
-                dropped += 1
-                continue
+            flagged = "yes" if REQUIRED & set(missing) else "no"
+            n_flagged += flagged == "yes"
+
             rows.append({
                 "recording_id": rec["recording_id"], "patient_id": rec["patient_id"],
                 "split": split, "window": w, "start_sample": w * args.window_seconds * rate,
                 "missing": ";".join(missing),
+                "flagged": flagged
             })
             stats[split][0] += 1
             stats[split][1] += bool(missing)
@@ -102,10 +104,10 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"dropped {dropped} windows with a Flow / Nasal Pressure / Snore gap")
-    for split, (kept, belt, patients) in stats.items():
+    print(f"{n_flagged} windows flagged (gap in Flow / Nasal Pressure / Snore)")
+    for split, (kept, any_gap, patients) in stats.items():
         print(f"{split:5s}: {len(patients):3d} patients, {kept:7d} windows "
-              f"({kept * args.window_seconds / 3600:.0f} h), {belt} with a belt gap")
+              f"({kept * args.window_seconds / 3600:.0f} h), {any_gap} with any gap")
     print(f"-> {out}")
 
 

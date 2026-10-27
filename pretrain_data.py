@@ -29,7 +29,7 @@ class WindowDataset:
         self.data = data
         manifest = {r["recording_id"]: r for r in csv.DictReader(open(data / "manifest.csv", encoding="utf-8"))}
         self.windows = [w for w in csv.DictReader(open(data / "windows.csv", encoding="utf-8"))
-                        if w["split"] == split]
+                        if w["split"] == split and w.get("flagged") != "yes"]
         self.stats = {}
         for w in self.windows:
             rid = w["recording_id"]
