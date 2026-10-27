@@ -64,6 +64,7 @@ def main():
           f"for < {args.min_usable_hours:g} usable h; using {len(used)}")
 
     rows = []
+    report = []
     stats = {"train": [0, 0, set()], "val": [0, 0, set()]}  # windows kept, with any gaps, patients
     n_flagged = 0
     for rec in sorted(used, key=lambda r: r["recording_id"]):
@@ -82,11 +83,14 @@ def main():
         usable_len = n_windows * args.window_seconds
         bad_windows = {name: mask[:usable_len].reshape(n_windows, -1).any(axis=1)
                        for name, mask in bad.items()}
-
+        rec_windows = 0
+        rec_flagged = 0
         for w in range(n_windows):
             missing = [name for name in respiratory_channels if bad_windows[name][w]]
             flagged = "yes" if REQUIRED & set(missing) else "no"
             n_flagged += flagged == "yes"
+            rec_flagged += flagged == "yes"
+            rec_windows += 1
 
             rows.append({
                 "recording_id": rec["recording_id"], "patient_id": rec["patient_id"],
@@ -97,12 +101,24 @@ def main():
             stats[split][0] += 1
             stats[split][1] += bool(missing)
             stats[split][2].add(rec["patient_id"])
+        report.append({
+            "recording_id": rec["recording_id"], "patient_id": rec["patient_id"],
+            "split": split, 
+            "windows": rec_windows,
+            "flagged": rec_flagged
+            })
 
     out = data / "windows.csv"
     with open(out, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)
+    report_out = data / "windows report.csv"
+    with open(report_out, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["recording_id", "patient_id", "split", "windows", "flagged"])
+        writer.writeheader()
+        writer.writerows(report)
+    print(f"-> {report_out}")
 
     print(f"{n_flagged} windows flagged (gap in Flow / Nasal Pressure / Snore)")
     for split, (kept, any_gap, patients) in stats.items():
