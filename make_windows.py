@@ -53,15 +53,23 @@ def main():
     data = Path(args.data)
 
     manifest = list(csv.DictReader(open(data / "manifest.csv", encoding="utf-8")))
+    # IDs of labeled participants in breath-classification validation/testing:
+    # they must never be seen during pretraining
+    held_out = set()
+    for row in csv.DictReader(open("labeled patient split.csv", encoding="utf-8")):
+        if row["split"] != "training":
+            held_out.update(row["recording"].split("_"))
     gaps = list(csv.DictReader(open(data / "gaps.csv", encoding="utf-8")))
     gaps_by_source = {}
     for g in gaps:
         gaps_by_source.setdefault(g["source"], []).append(g)
 
     selected = [r for r in manifest if r["selected"] == "yes"]
-    used = [r for r in selected if float(r["usable_h"]) >= args.min_usable_hours]
-    print(f"{len(selected)} selected recordings; {len(selected) - len(used)} left out "
-          f"for < {args.min_usable_hours:g} usable h; using {len(used)}")
+    long_enough = [r for r in selected if float(r["usable_h"]) >= args.min_usable_hours]
+    used = [r for r in long_enough if r["patient_id"] not in held_out]
+    print(f"{len(selected)} selected recordings; {len(selected) - len(long_enough)} left out "
+          f"for < {args.min_usable_hours:g} usable h; {len(long_enough) - len(used)} left out "
+          f"as breath-classification val/test participants; using {len(used)}")
 
     rows = []
     report = []
