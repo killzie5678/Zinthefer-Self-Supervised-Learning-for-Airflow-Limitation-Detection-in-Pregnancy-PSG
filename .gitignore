@@ -14,11 +14,13 @@ SSRE/
 pretrain dataset/
 pretrain plots/
 pretrain runs/
+psg_data_cleaned/
 *.edf_*.png
 
 # logs and tables that list patient IDs and recording dates
 Batch * export log.csv
 Batch * export console.txt
 Batch * short recordings - missing data.csv
+labeled patient split.csv
 
 __pycache__/
