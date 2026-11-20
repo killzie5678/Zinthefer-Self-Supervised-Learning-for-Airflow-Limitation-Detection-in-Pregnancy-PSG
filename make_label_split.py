@@ -9,13 +9,15 @@
 # Participant IDs are the 4-digit numbers starting with 4 or 5 (confirmed by
 # the PI). A filename can hold two of them, e.g. "5402_4286_1.edf" (the last
 # part is the trimester); one recording is one person, so both are the same
-# participant. Files sharing any ID are joined into one participant, written
-# as all their IDs, e.g. "4286;5402".
+# participant. Files sharing any ID are joined into one participant, named by
+# its lowest ID.
 #
-# The split is by patient, not by breath, so no patient's breaths end up in
-# both training and testing. Patients are sorted, then shuffled with a fixed
-# --seed, so rerunning gives exactly the same split. Writes one row per
-# patient: patient_id, split. This file holds patient IDs: keep it off GitHub.
+# The split is chosen per participant, not per recording or breath, so no
+# participant has one trimester in training and another in testing.
+# Participants are sorted, then shuffled with a fixed --seed, so rerunning
+# gives exactly the same split. Writes one row per recording: recording (the
+# filename without .edf), participant, split. This file holds patient IDs:
+# keep it off GitHub.
 
 import argparse
 import csv
@@ -38,32 +40,40 @@ def main():
         raise SystemExit(f"{out} already exists; the split is meant to stay fixed. Use --force to overwrite.")
 
     files = sorted(Path(args.folder).glob("*.edf"))
+    file_ids = {}  # recording name -> its 4xxx/5xxx IDs
     groups, unmatched = [], []  # groups: one set of IDs per participant
     for f in files:
         ids = {part for part in f.stem.split("_") if len(part) == 4 and part.isdigit() and part[0] in "45"}
         if not ids:
             unmatched.append(f.name)
             continue
+        file_ids[f.stem] = ids
         for g in [g for g in groups if g & ids]:  # merge every group sharing an ID with this file
             groups.remove(g)
-            ids |= g
+            ids = ids | g
         groups.append(ids)
     if unmatched:
         print(f"{len(unmatched)} files with no 4xxx/5xxx ID, left out (check these yourself): {unmatched}")
-    patients = sorted(";".join(sorted(g)) for g in groups)
+    patients = sorted(min(g) for g in groups)  # each participant named by its lowest ID
     random.Random(args.seed).shuffle(patients)
 
     n_val = round(len(patients) * args.val_percent / 100)
     n_test = round(len(patients) * args.test_percent / 100)
     n_train = len(patients) - n_val - n_test
     splits = ["training"] * n_train + ["validation"] * n_val + ["testing"] * n_test
+    split_of = dict(zip(patients, splits))
+
+    rows = []
+    for name, ids in sorted(file_ids.items()):
+        participant = min(next(g for g in groups if g & ids))
+        rows.append([name, participant, split_of[participant]])
 
     with open(out, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["patient_id", "split"])
-        writer.writerows(sorted(zip(patients, splits)))
+        writer.writerow(["recording", "participant", "split"])
+        writer.writerows(rows)
 
-    print(f"{len(files)} .edf files, {len(patients)} patients: "
+    print(f"{len(rows)} recordings from {len(patients)} participants: "
           f"{n_train} training, {n_val} validation, {n_test} testing (seed {args.seed})")
     print(f"-> {out}")
 
